@@ -107,7 +107,6 @@ ecv(dat$RF,dat$COSkgm2)
 #-0.45 1.46 5.90 2.43 1.68 0.14 0.11
 
 
-
 #####Updating plot and RF histogram#####
  
 x11()
