@@ -107,32 +107,30 @@ ecv(dat$RF,dat$COSkgm2)
 #-0.45 1.46 5.90 2.43 1.68 0.14 0.11
 
 
-
 #####Updating plot and RF histogram#####
  
 x11()
 par(mar=c(5,5,5,0))
 par(mgp=c(3,1,0))
-hist(dat$COSkgm2*10, breaks = 50, main  = "Histogram of SOC stock measured",
-     ylim=c(0,120),las=1,xlim=c(0,250),
-     xlab= expression("SOC stock" ~ (t~ha^{-1}))) 
+hist(dat$COSkgm2, breaks = 50, main  = "Histogram of SOC stock measured",
+     ylim=c(0,120),las=1,xlim=c(0,25),
+     xlab= expression("SOC stock" ~ (kg~m^{-2}))) 
      
 x11()
 par(mar=c(5,5,5,0))
 par(mgp=c(4,1,0))
-hist(RK, breaks = 100, main  = "Histogram of SOC stock estimated values by RK",
-     ylim=c(0,6000),las=1,
-     xlab= expression("SOC stock" ~ (t~ha^{-1})))
+hist(RK*0.1, breaks = 100, main  = "Histogram of SOC stock estimated values by RK",
+     ylim=c(0,30000),las=1,
+     xlab= expression("SOC stock" ~ (kg~m^{-2})))
      
 x11()
 par(mar=c(5,5,5,0))
 par(mgp=c(4,1,0))
-hist(RF, breaks = 100, main  = "Histogram of SOC stock estimated values by RF",
+hist(RF*0.1, breaks = 100, main  = "Histogram of SOC stock estimated values by RF",
      ylim=c(0,35000),las=1,
-     xlab= expression("SOC stock" ~ (t~ha^{-1})))
+     xlab= expression("SOC stock" ~ (k~m^{-2})))
 
 
-summary(dat$COSkgm2*10)
 
 
 
