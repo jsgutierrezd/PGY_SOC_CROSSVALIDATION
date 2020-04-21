@@ -1,5 +1,7 @@
 setwd("~/PGY_crossvalidationchecking")
 
+#Descriptive statistics for observed SOC stock-RK-RF and external validation
+
 library(raster)
 library(sp)
 library(hydroGOF)
@@ -53,7 +55,7 @@ descr(values(RF))
 # MIN   Q1  MED   Q3  MAX PROM DESVEST    CV CURT SKEW
 #1.4 4.14 4.36 4.68 8.32 4.52    0.63 14.01 5.69 1.42
 
-#####Checking external cross validation#####
+#####Checking external validation#####
 
 #Stack RK, RF and raster of differences between the two models
 mod <- stack(RK,RF,DIFF)
@@ -130,5 +132,9 @@ hist(RF*10, breaks = 100, main  = "Histogram of SOC stock estimated values by RF
 
 
      
+
+
+
+
 
 
