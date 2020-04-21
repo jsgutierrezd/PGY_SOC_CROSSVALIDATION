@@ -128,7 +128,9 @@ par(mar=c(5,5,5,0))
 par(mgp=c(4,1,0))
 hist(RF*0.1, breaks = 100, main  = "Histogram of SOC stock estimated values by RF",
      ylim=c(0,35000),las=1,
-     xlab= expression("SOC stock" ~ (k~m^{-2})))
+     xlab= expression("SOC stock" ~ (kg~m^{-2})))
+
+
 
 
 
