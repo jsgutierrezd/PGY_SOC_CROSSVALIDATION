@@ -1,5 +1,7 @@
 setwd("~/PGY_crossvalidationchecking")
 
+#Descriptive statistics for observed SOC stock-RK-RF and external validation
+
 library(raster)
 library(sp)
 library(hydroGOF)
@@ -13,8 +15,8 @@ dat <- read.csv("G:\\My Drive\\PARAGUAY_COS\\Paraguay_Matriz_Validacion.csv")
 datrm <- read.csv("G:\\My Drive\\PARAGUAY_COS\\Paraguay_Matriz_Regresion.csv")
 summary(datrm)
 #####Loading final raster models and unit conversion to kg.m-2#####
-RK <- raster("G:\\My Drive\\PARAGUAY_COS\\PRY_Mapa_COS_tnha_geo.tif")*0.1
-RF <- raster("G:\\My Drive\\PARAGUAY_COS\\PRY1_COS_Rf_tnha_2a (1).tif")*0.1
+RK <- raster("G:\\My Drive\\PARAGUAY_COS\\PRY_Mapa_COS_tnha_geo.tif")
+RF <- raster("G:\\My Drive\\PARAGUAY_COS\\PRY1_COS_Rf_tnha_2a (1).tif")
 RF <- resample(RF, RK, methods = 'ngb')
 DIFF <- RK-RF
 x11()
@@ -46,14 +48,14 @@ descr(datrm$COS_0.30)
 descr(datrm$COSkgm2) 
 # MIN  Q1  MED   Q3   MAX PROM DESVEST   CV  CURT SKEW
 #0.42 3.6 4.29 5.65 21.98 4.89    2.17 44.5 11.04 2.11
-descr(values(RK))
+descr(values(RK)*0.1)
 # MIN   Q1  MED   Q3  MAX PROM DESVEST    CV CURT SKEW
 #1.95 4.05 4.32 4.77 8.41 4.52    0.71 15.74 5.21  1.3
-descr(values(RF))
+descr(values(RF)*0.1)
 # MIN   Q1  MED   Q3  MAX PROM DESVEST    CV CURT SKEW
 #1.4 4.14 4.36 4.68 8.32 4.52    0.63 14.01 5.69 1.42
 
-#####Checking external cross validation#####
+#####Checking external validation#####
 
 #Stack RK, RF and raster of differences between the two models
 mod <- stack(RK,RF,DIFF)
@@ -107,28 +109,33 @@ ecv(dat$RF,dat$COSkgm2)
 
 
 #####Updating plot and RF histogram#####
+ 
 x11()
 par(mar=c(5,5,5,0))
 par(mgp=c(3,1,0))
-hist(dat$COSkgm2*10, breaks = 100, main  = "Histogram of SOC stock measured",
-     ylim=c(0,120),las=1,
+hist(dat$COSkgm2*10, breaks = 50, main  = "Histogram of SOC stock measured",
+     ylim=c(0,120),las=1,xlim=c(0,250),
      xlab= expression("SOC stock" ~ (t~ha^{-1}))) 
      
 x11()
 par(mar=c(5,5,5,0))
 par(mgp=c(4,1,0))
-hist(RK*10, breaks = 100, main  = "Histogram of SOC stock estimated values by RK",
-     ylim=c(0,30000),las=1,
+hist(RK, breaks = 100, main  = "Histogram of SOC stock estimated values by RK",
+     ylim=c(0,6000),las=1,
      xlab= expression("SOC stock" ~ (t~ha^{-1})))
      
 x11()
 par(mar=c(5,5,5,0))
 par(mgp=c(4,1,0))
-hist(RF*10, breaks = 100, main  = "Histogram of SOC stock estimated values by RF",
+hist(RF, breaks = 100, main  = "Histogram of SOC stock estimated values by RF",
      ylim=c(0,35000),las=1,
      xlab= expression("SOC stock" ~ (t~ha^{-1})))
 
 
-     
+summary(dat$COSkgm2*10)
+
+
+
+
 
 
