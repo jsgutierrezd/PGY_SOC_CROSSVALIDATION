@@ -70,13 +70,29 @@ names(dat)
 #DIFF
 
 summary(dat$RK)
-summary(dat$COSkgm2)
-rmse(dat$RK,dat$COSkgm2)
-mae(dat$RK,dat$COSkgm2)
-
 summary(dat$RF)
-rmse(dat$RF,dat$COSkgm2)
-cor(dat$RF,dat$COSkgm2)
-mae(dat$RF,dat$COSkgm2)
 
-summary(dat$DIFF)
+ecv <- function(sim,pred){
+  ME <- me(sim,pred)#mean error
+  MAE <- mae(sim,pred)#mean absolute error
+  MSE <- mse(sim,pred)#mean square error
+  RMSE <- rmse(sim,pred)#root mean square error
+  Q3 <- abs(sim - pred) %>% quantile(0.75, na.rm=TRUE)#Third quartile
+  AVE <- 1 - sum((sim-pred)^2, na.rm=TRUE) / 
+    sum( (pred - mean(pred, na.rm = TRUE))^2, 
+         na.rm = TRUE)##Amount of variance explained
+    R2 <- (cor(sim,pred)^2)#R2
+  return(data.frame(ME,MAE,MSE,RMSE,Q3,R2,AVE))%>% round(digits=2)
+}
+
+ecv(dat$RK,dat$COSkgm2)
+#   ME  MAE  MSE RMSE   Q3   R2 AVE
+#-0.45 1.47 5.92 2.43 1.73 0.13 0.1
+
+
+ecv(dat$RF,dat$COSkgm2)
+#   ME  MAE  MSE  MSE   Q3   R2  AVE
+#-0.45 1.46 5.90 2.43 1.68 0.14 0.11
+
+
+
