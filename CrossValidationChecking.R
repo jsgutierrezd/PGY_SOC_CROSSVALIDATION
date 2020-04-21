@@ -1,14 +1,34 @@
 setwd("~/PGY_crossvalidationchecking")
-#
 
 library(raster)
 library(sp)
 library(hydroGOF)
 library(magrittr)
-
+library(moments)
 
 #Loading cross validation matrix
 dat <- read.csv("G:\\My Drive\\PARAGUAY_COS\\Paraguay_Matriz_Validacion.csv")
+
+#Loading regression matrix
+datrm <- read.csv("G:\\My Drive\\PARAGUAY_COS\\Paraguay_Matriz_Regresion.csv")
+summary(datrm)
+#Summarizing observed SOC stock
+names(datrm)
+
+descr <- function(columna){
+  MAX <- max(columna,na.rm=T)
+  MIN <- min(columna,na.rm=T)
+  PROM <- mean(columna,na.rm=T)
+  DESVEST <- sd(columna,na.rm=T)
+  CV <- DESVEST/PROM*100
+  CURT <- kurtosis(columna,na.rm=T)
+  SKEW <- skewness(columna,na.rm=T)
+  return(data.frame(MAX, MIN, PROM,DESVEST,CV, CURT, SKEW))
+}
+descr(datrm$COSkgm2) %>% round(digits=2)
+
+#             MAX   MIN  PROM DESVEST     CV   CURT  SKEW
+# COSkgm2  21.976 0.423 4.887   2.175 44.499 11.037 2.112
 
 #Loading final raster models and unit conversion to kg.m-2
 RK <- raster("G:\\My Drive\\PARAGUAY_COS\\PRY_Mapa_COS_tnha_geo.tif")*0.1
@@ -27,7 +47,7 @@ stats <- c("sum", "mean","min","max","sd","skew")
 #RK model
 df <- c()
 for(i in 1:length(stats)){
-  temp <- cellStats(RK,stats[i]) %>% as.numeric() %>% round(digits = 2)
+  temp <- cellStats(RK,stats[i]) %>% as.numeric() %>% round(digits = 3)
   df <- c(df,temp)
 }
 df
@@ -35,7 +55,7 @@ df
 #RF model
 df1 <- c()
 for(i in 1:length(stats)){
-  temp <- cellStats(RF,stats[i]) %>% as.numeric() %>% round(digits = 2)
+  temp <- cellStats(RF,stats[i]) %>% as.numeric() %>% round(digits = 3)
   df1 <- c(df1,temp)
 }
 df1
@@ -44,7 +64,7 @@ df1
 #DIFF
 df2 <- c()
 for(i in 1:length(stats)){
-  temp <- cellStats(DIFF,stats[i]) %>% as.numeric() %>% round(digits = 2)
+  temp <- cellStats(DIFF,stats[i]) %>% as.numeric() %>% round(digits = 3)
   df2 <- c(df2,temp)
 }
 df2
@@ -54,10 +74,10 @@ row.names(modStats) <- c("RK","RF","DIFF")
 colnames(modStats) <- stats
 modStats
 
-#           sum mean   min  max   sd skew
-#RK   2280158.11 4.52  1.95 8.41 0.71 1.30
-#RF   2286478.49 4.52  1.40 8.32 0.63 1.42
-#DIFF     -88.04 0.00 -2.66 3.04 0.42 0.47
+              #sum  mean    min   max    sd  skew
+# RK   2280158.115 4.516  1.948 8.412 0.711 1.304
+# RF   2286478.487 4.518  1.403 8.316 0.633 1.418
+# DIFF     -88.038 0.000 -2.663 3.036 0.420 0.474
 
 #Stack RK, RF and raster of differences between the two models
 mod <- stack(RK,RF,DIFF)
