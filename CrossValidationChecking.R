@@ -106,27 +106,29 @@ ecv(dat$RF,dat$COSkgm2)
 
 
 
-#Updating plot and RF histogram
+#####Updating plot and RF histogram#####
 x11()
 par(mar=c(5,5,5,0))
 par(mgp=c(3,1,0))
-hist(dat$COSkgm2*10, breaks = 100, main  = "Histogram of soc stock measured",
+hist(dat$COSkgm2*10, breaks = 100, main  = "Histogram of SOC stock measured",
      ylim=c(0,120),las=1,
      xlab= expression("SOC stock" ~ (t~ha^{-1}))) 
      
 x11()
 par(mar=c(5,5,5,0))
 par(mgp=c(4,1,0))
-hist(RK*10, breaks = 100, main  = "Histogram of soc stock estimated values by RK",
+hist(RK*10, breaks = 100, main  = "Histogram of SOC stock estimated values by RK",
      ylim=c(0,30000),las=1,
      xlab= expression("SOC stock" ~ (t~ha^{-1})))
      
 x11()
 par(mar=c(5,5,5,0))
 par(mgp=c(4,1,0))
-hist(RF*10, breaks = 100, main  = "Histogram of soc stock estimated values by RF",
+hist(RF*10, breaks = 100, main  = "Histogram of SOC stock estimated values by RF",
      ylim=c(0,35000),las=1,
      xlab= expression("SOC stock" ~ (t~ha^{-1})))
+
+
      
 
 
