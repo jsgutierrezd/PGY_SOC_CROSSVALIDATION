@@ -11,16 +11,17 @@ library(magrittr)
 library(moments)
 
 #####Loading cross validation matrix####
-dat <- read.csv("G:\\My Drive\\PARAGUAY_COS\\Paraguay_Matriz_Validacion.csv")
+dat <- read.csv("G:\\My Drive\\IGAC_2019\\PRODUCTOS_2019\\PUBLICACIONES\\COS_PARAGUAY\\2020\\Paraguay_Matriz_Validacion.csv")
 
 #####Loading regression matrix#####
-datrm <- read.csv("G:\\My Drive\\PARAGUAY_COS\\Paraguay_Matriz_Regresion.csv")
+datrm <- read.csv("G:\\My Drive\\IGAC_2019\\PRODUCTOS_2019\\PUBLICACIONES\\COS_PARAGUAY\\2020\\Paraguay_Matriz_Regresion.csv")
 summary(datrm)
 #####Loading final raster models and unit conversion to kg.m-2#####
-RK <- raster("G:\\My Drive\\PARAGUAY_COS\\PRY_Mapa_COS_tnha_geo.tif")
-RF <- raster("G:\\My Drive\\PARAGUAY_COS\\PRY1_COS_Rf_tnha_2a (1).tif")
+RK <- raster("G:\\My Drive\\IGAC_2019\\PRODUCTOS_2019\\PUBLICACIONES\\COS_PARAGUAY\\2020\\PRY_Mapa_COS_tnha_geo.tif")
+RF <- raster("G:\\My Drive\\IGAC_2019\\PRODUCTOS_2019\\PUBLICACIONES\\COS_PARAGUAY\\2020\\PRY1_COS_Rf_tnha_2a (1).tif")
 RF <- resample(RF, RK, methods = 'ngb')
 DIFF <- RK-RF
+DIFFABS <- abs(DIFF)
 x11()
 par(mfrow=c(1,3))
 plot(RK,main="RK model")
@@ -56,6 +57,14 @@ descr(values(RK)*0.1)
 descr(values(RF)*0.1)
 # MIN   Q1  MED   Q3  MAX PROM DESVEST    CV CURT SKEW
 #1.4 4.14 4.36 4.68 8.32 4.52    0.63 14.01 5.69 1.42
+
+descr(values(DIFF)*0.1)
+#   MIN    Q1 MED   Q3 MAX PROM DESVEST        CV CURT SKEW
+#-0.27 -0.02   0 0.02 0.3    0    0.04 -240489.4 4.73 0.47
+
+descr(values(DIFFABS)*0.1)
+#MIN   Q1  MED   Q3 MAX PROM DESVEST   CV CURT SKEW
+#  0 0.01 0.02 0.04 0.3 0.03    0.03 90.3 7.05  1.7
 
 #####Checking external validation#####
 
@@ -132,13 +141,21 @@ hist(RF*0.1, breaks = 100, main  = "Histogram of SOC stock estimated values by R
      ylim=c(0,35000),las=1,
      xlab= expression("SOC stock" ~ (kg~m^{-2})))
 
+x11()
+par(mar=c(5,5,5,0))
+par(mgp=c(4,1,0))
+hist(DIFFABS*0.1, breaks = 100, main  = "Histogram of absolute difference between estimated values by RK and estimated values by RF",
+     ylim=c(0,65000),las=1,
+     xlab= expression("SOC stock" ~ (kg~m^{-2})))
 
 
 
+boxplot(dat$COSkgm2)
+boxplot(RK*0.1)
+boxplot(RF*0.1)
 
 
-
-
+cor(values(RK),values(RF),use = "complete.obs")
 
 
 
