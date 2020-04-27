@@ -3,7 +3,7 @@ setwd("~/PGY_crossvalidationchecking")
 #===========================================================================
 #Descriptive statistics for observed SOC stock-RK-RF and external validation
 #===========================================================================
-
+getwd()
 library(raster)
 library(sp)
 library(hydroGOF)
@@ -117,6 +117,11 @@ ecv(dat$RF,dat$COSkgm2)
 #   ME  MAE  MSE  MSE   Q3   R2  AVE
 #-0.45 1.46 5.90 2.43 1.68 0.14 0.11
 
+x11()
+plot(dat$COSkgm2,dat$RF)
+
+x11()
+plot(dat$COSkgm2, dat$RK)
 
 #####Updating plot and RF histogram#####
  
